@@ -22,11 +22,33 @@ class ILaptopBestSellerRepository(ABC):
     def get_laptop(self):
         pass
 
+    @abstractmethod
+    def get_laptop_for_statistic(self, fields):
+        pass
+
+    @abstractmethod
+    def get_best_seller_laptop_for_statistic(self, fields):
+        pass
+
 
 class LaptopBestSellerRepository(ILaptopBestSellerRepository):
 
     def get_laptop(self):
         sql = 'select * from LAPTOPBESTSELLER'
+        cursor = self.mysql_db.cursor()
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        return data
+
+    def get_laptop_for_statistic(self, fields):
+        sql = 'select {} from LAPTOPBESTSELLER'.format(",".join(fields))
+        cursor = self.mysql_db.cursor()
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        return data
+
+    def get_best_seller_laptop_for_statistic(self, fields):
+        sql = 'select {} from LAPTOPBESTSELLER where BestSeller = 1'.format(",".join(fields))
         cursor = self.mysql_db.cursor()
         cursor.execute(sql)
         data = cursor.fetchall()
